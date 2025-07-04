@@ -135,6 +135,10 @@
         font-size: 14px;
         font-weight: 500;
         transition: all 0.2s ease;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
     }
     
     .et_mobile_menu li a:hover {
@@ -171,4 +175,28 @@
         width: 100%;
         text-align: center; /* Help center the mobile menu */
     }
+    
+    /* Ensure all dynamically generated menu content is unselectable */
+    #et_mobile_nav_menu a,
+    .et_mobile_menu a,
+    .mobile_nav *,
+    nav a {
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+    }
+}
+
+/* Desktop menu user-select fix - applied globally */
+#top-menu li a,
+#top-menu li ul.sub-menu li a,
+.nav li a,
+.nav li ul li a,
+#et-top-navigation a,
+#top-menu-nav a {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
 }
