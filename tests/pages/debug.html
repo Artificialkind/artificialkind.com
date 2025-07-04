@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug - Artificialkind</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #f0f0f0; }
+        .section { margin: 20px 0; padding: 10px; background: white; border: 1px solid #ccc; }
+        .error { color: red; font-weight: bold; }
+        .success { color: green; font-weight: bold; }
+        .warning { color: orange; font-weight: bold; }
+        iframe { width: 100%; height: 400px; border: 2px solid #000; }
+    </style>
+</head>
+<body>
+    <h1>Artificialkind Website Debugger</h1>
+    
+    <div class="section">
+        <h2>Live Website</h2>
+        <iframe src="./index.html" id="website" onload="analyzeWebsite()"></iframe>
+    </div>
+    
+    <div class="section" id="analysis">
+        <h2>Analysis Results</h2>
+        <div id="results">Analyzing...</div>
+    </div>
+    
+    <script>
+        function analyzeWebsite() {
+            const iframe = document.getElementById('website');
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            const iframeWin = iframe.contentWindow;
+            let results = [];
+            
+            // Check 1: JavaScript Functions
+            results.push('<h3>JavaScript Functions</h3>');
+            const functions = ['initNavigation', 'initPreloader', 'initAnimations', 'initAccessibility'];
+            functions.forEach(fn => {
+                const exists = typeof iframeWin[fn] === 'function';
+                results.push(`${fn}: <span class="${exists ? 'success' : 'error'}">${exists ? '✓ Exists' : '✗ Missing'}</span>`);
+            });
+            
+            // Check 2: Preloader State
+            results.push('<h3>Preloader State</h3>');
+            const preloader = iframeDoc.getElementById('loftloader-wrapper');
+            if (preloader) {
+                const computed = iframeWin.getComputedStyle(preloader);
+                results.push(`Display: ${computed.display}`);
+                results.push(`Visibility: ${computed.visibility}`);
+                results.push(`Opacity: ${computed.opacity}`);
+                results.push(`Has 'loaded' class: ${preloader.classList.contains('loaded')}`);
+            } else {
+                results.push('<span class="error">Preloader not found!</span>');
+            }
+            
+            // Check 3: Content Visibility
+            results.push('<h3>Content Visibility</h3>');
+            const pageContainer = iframeDoc.getElementById('page-container');
+            if (pageContainer) {
+                const computed = iframeWin.getComputedStyle(pageContainer);
+                results.push(`Page Container Display: ${computed.display}`);
+                results.push(`Page Container Opacity: ${computed.opacity}`);
+                results.push(`Page Container Visibility: ${computed.visibility}`);
+            }
+            
+            // Check 4: Images
+            results.push('<h3>Images</h3>');
+            const images = iframeDoc.querySelectorAll('img');
+            let loadedImages = 0;
+            let failedImages = [];
+            
+            images.forEach(img => {
+                if (img.complete && img.naturalHeight !== 0) {
+                    loadedImages++;
+                } else {
+                    failedImages.push(img.src);
+                }
+            });
+            
+            results.push(`Total images: ${images.length}`);
+            results.push(`Loaded successfully: <span class="${loadedImages === images.length ? 'success' : 'warning'}">${loadedImages}</span>`);
+            if (failedImages.length > 0) {
+                results.push('<span class="error">Failed images:</span>');
+                failedImages.forEach(src => {
+                    results.push(`  - ${src}`);
+                });
+            }
+            
+            // Check 5: Hidden Elements
+            results.push('<h3>Hidden Elements Check</h3>');
+            const sections = iframeDoc.querySelectorAll('.et_pb_section');
+            sections.forEach((section, index) => {
+                const computed = iframeWin.getComputedStyle(section);
+                const isHidden = computed.display === 'none' || computed.visibility === 'hidden' || computed.opacity === '0';
+                if (isHidden) {
+                    results.push(`<span class="error">Section ${index} is hidden! (${section.id || 'no id'})</span>`);
+                }
+            });
+            
+            // Check 6: Text Content
+            results.push('<h3>Text Content Check</h3>');
+            const mainHeading = iframeDoc.querySelector('h1');
+            if (mainHeading) {
+                results.push(`First H1: "${mainHeading.textContent.trim()}"`);
+                const computed = iframeWin.getComputedStyle(mainHeading);
+                results.push(`H1 Visibility: ${computed.visibility}, Display: ${computed.display}`);
+            } else {
+                results.push('<span class="error">No H1 found!</span>');
+            }
+            
+            // Check 7: Console Errors
+            results.push('<h3>Console Errors</h3>');
+            // Inject error catcher
+            iframeWin.addEventListener('error', function(e) {
+                results.push(`<span class="error">Error: ${e.message} at ${e.filename}:${e.lineno}</span>`);
+            });
+            
+            // Check 8: CSS Files
+            results.push('<h3>CSS Files</h3>');
+            const styleSheets = iframeDoc.styleSheets;
+            for (let i = 0; i < styleSheets.length; i++) {
+                try {
+                    const sheet = styleSheets[i];
+                    results.push(`${sheet.href || 'Inline styles'}: ${sheet.cssRules ? sheet.cssRules.length + ' rules' : 'No access'}`);
+                } catch (e) {
+                    results.push(`<span class="warning">Cannot access stylesheet</span>`);
+                }
+            }
+            
+            // Display results
+            document.getElementById('results').innerHTML = results.join('<br>');
+            
+            // Try to fix visibility issues
+            setTimeout(() => {
+                results.push('<h3>Attempting Auto-Fix...</h3>');
+                
+                // Force preloader to hide
+                if (preloader && iframeWin.getComputedStyle(preloader).display !== 'none') {
+                    preloader.style.display = 'none';
+                    results.push('<span class="success">Force-hid preloader</span>');
+                }
+                
+                // Force page container visible
+                if (pageContainer) {
+                    pageContainer.style.opacity = '1';
+                    pageContainer.style.visibility = 'visible';
+                    pageContainer.style.display = 'block';
+                    results.push('<span class="success">Force-showed page container</span>');
+                }
+                
+                // Update results
+                document.getElementById('results').innerHTML = results.join('<br>');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

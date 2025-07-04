@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Fix - Artificialkind</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        iframe { width: 100%; height: 600px; border: 2px solid #000; }
+        .status { margin: 20px 0; padding: 10px; background: #f0f0f0; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Website Fix Verification</h1>
+    
+    <div class="status" id="status">Checking website status...</div>
+    
+    <h2>Website Preview:</h2>
+    <iframe src="./index.html" id="website-frame"></iframe>
+    
+    <h2>Console Output:</h2>
+    <div id="console-output" style="background: #000; color: #0f0; padding: 10px; font-family: monospace; height: 200px; overflow-y: scroll;"></div>
+    
+    <script>
+        const status = document.getElementById('status');
+        const consoleOutput = document.getElementById('console-output');
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        // Capture console output
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            consoleOutput.innerHTML += '<div>[LOG] ' + args.join(' ') + '</div>';
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            consoleOutput.innerHTML += '<div style="color: #f00;">[ERROR] ' + args.join(' ') + '</div>';
+        };
+        
+        // Check if functions are available
+        setTimeout(() => {
+            const iframe = document.getElementById('website-frame');
+            const iframeWindow = iframe.contentWindow;
+            
+            let checks = [];
+            
+            // Check if functions exist
+            checks.push({
+                name: 'initNavigation exists',
+                pass: typeof iframeWindow.initNavigation === 'function'
+            });
+            
+            checks.push({
+                name: 'initPreloader exists',
+                pass: typeof iframeWindow.initPreloader === 'function'
+            });
+            
+            checks.push({
+                name: 'initAnimations exists',
+                pass: typeof iframeWindow.initAnimations === 'function'
+            });
+            
+            checks.push({
+                name: 'initAccessibility exists',
+                pass: typeof iframeWindow.initAccessibility === 'function'
+            });
+            
+            // Check if preloader is hidden
+            const preloader = iframeWindow.document.getElementById('loftloader-wrapper');
+            checks.push({
+                name: 'Preloader is hidden',
+                pass: preloader && (preloader.style.display === 'none' || 
+                      preloader.classList.contains('loaded') || 
+                      window.getComputedStyle(preloader).visibility === 'hidden')
+            });
+            
+            // Check if content is visible
+            const content = iframeWindow.document.querySelector('.et_pb_text_inner h1');
+            checks.push({
+                name: 'Main content is visible',
+                pass: content && content.textContent.includes('UNIFYING REALITIES')
+            });
+            
+            // Check if images are present
+            const images = iframeWindow.document.querySelectorAll('img');
+            checks.push({
+                name: 'Images are present',
+                pass: images.length > 0
+            });
+            
+            // Display results
+            let allPass = true;
+            let html = '<h3>Checks:</h3><ul>';
+            checks.forEach(check => {
+                html += `<li class="${check.pass ? 'success' : 'error'}">${check.name}: ${check.pass ? '✅' : '❌'}</li>`;
+                if (!check.pass) allPass = false;
+            });
+            html += '</ul>';
+            
+            if (allPass) {
+                status.innerHTML = '<span class="success">✅ All checks passed! Website is working correctly.</span>';
+            } else {
+                status.innerHTML = '<span class="error">❌ Some checks failed. See details below.</span>';
+            }
+            
+            status.innerHTML += html;
+            
+        }, 2000); // Wait for page to load
+    </script>
+</body>
+</html>

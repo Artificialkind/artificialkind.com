@@ -1,0 +1,102 @@
+/* Scroll to Top Button Styles */
+
+/* Base styles for scroll-to-top button */
+.et_pb_scroll_top {
+    position: fixed;
+    bottom: 125px;
+    right: 0;
+    z-index: 99999;
+    display: none; /* Hidden by default */
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 50px;
+    font-size: 30px;
+    border-radius: 5px 0 0 5px;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Icon - using ETmodules font */
+.et_pb_scroll_top:before {
+    font-family: 'ETmodules';
+    content: "\32"; /* Up arrow icon */
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Visible state */
+.et_pb_scroll_top.et_pb_scroll_top_visible {
+    display: block;
+    -webkit-animation: fadeInRight 1s 1 cubic-bezier(0.645, 0.045, 0.355, 1);
+    -moz-animation: fadeInRight 1s 1 cubic-bezier(0.645, 0.045, 0.355, 1);
+    animation: fadeInRight 1s 1 cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* Hover effect */
+.et_pb_scroll_top:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding-left: 10px;
+    width: 60px;
+}
+
+/* Animations */
+@-webkit-keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateX(100%);
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+}
+
+@-moz-keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        -moz-transform: translateX(100%);
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        -moz-transform: translateX(0);
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Mobile adjustments */
+@media all and (max-width: 980px) {
+    .et_pb_scroll_top {
+        bottom: 60px;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 24px;
+    }
+    
+    .et_pb_scroll_top:hover {
+        width: 50px;
+        padding-left: 10px;
+    }
+}

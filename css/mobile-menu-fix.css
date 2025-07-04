@@ -1,0 +1,174 @@
+/* Mobile Menu Fix - Perfect Vertical Centering Solution */
+
+/* Hide mobile menu on desktop */
+@media all and (min-width: 981px) {
+    #et_mobile_nav_menu {
+        display: none !important;
+    }
+}
+
+/* Mobile menu styles */
+@media all and (max-width: 980px) {
+    #et_mobile_nav_menu {
+        display: block;
+        width: 90%;
+        max-width: 400px;
+        margin: 0 auto;
+        position: relative;
+    }
+    
+    /* Hide desktop menu on mobile */
+    #et-top-navigation nav {
+        display: none;
+    }
+    
+    /* Mobile nav container - the bar that shows "Select Page" */
+    .mobile_nav {
+        position: relative;
+        height: 48px;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 3px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 15px;
+        /* Override any inherited line-height */
+        line-height: normal !important;
+    }
+    
+    /* Select Page text - using inline-flex for perfect centering */
+    .select_page {
+        font-size: 14px;
+        font-weight: 600;
+        color: #006;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        user-select: none;
+        /* Perfect vertical centering technique */
+        display: inline-flex;
+        align-items: center;
+        height: 48px; /* Match parent height */
+        flex-shrink: 0;
+        /* Fine-tune with line-height */
+        line-height: 35px !important;
+        /* Small adjustment for visual centering */
+        padding-top: 1px !important;
+    }
+    
+    /* Mobile menu bar (hamburger icon) container */
+    .mobile_menu_bar {
+        /* Reset all inherited styles */
+        all: unset;
+        /* Rebuild as flex container */
+        width: 24px;
+        height: 45px; /* Match parent height for perfect centering */
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        flex-shrink: 0;
+        /* Override inherited styles */
+        padding: 0 !important;
+        line-height: normal !important;
+        font-size: 0 !important; /* Prevent font-based spacing */
+    }
+    
+    /* CSS hamburger icon - using flexbox approach */
+    .mobile_menu_bar::after {
+        content: '';
+        position: relative; /* Changed from absolute */
+        width: 24px;
+        height: 3px;
+        background-color: #2ea3f2;
+        box-shadow: 0 -7px 0 #2ea3f2, 0 7px 0 #2ea3f2;
+        transition: all 0.3s ease;
+        /* No transform needed with flexbox centering */
+        transform: none;
+    }
+    
+    /* Ensure font-based icon is completely hidden */
+    .mobile_menu_bar::before {
+        display: none !important;
+        content: none !important;
+    }
+    
+    /* Mobile menu dropdown */
+    .et_mobile_menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        border-top: 3px solid #2ea3f2;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        z-index: 999;
+        margin-top: 5px;
+    }
+    
+    /* Show menu when opened */
+    .mobile_nav.opened .et_mobile_menu {
+        display: block;
+    }
+    
+    /* Style for mobile menu items */
+    .et_mobile_menu li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .et_mobile_menu li:last-child {
+        border-bottom: none;
+    }
+    
+    .et_mobile_menu li a {
+        display: block;
+        padding: 15px 20px;
+        color: #006;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .et_mobile_menu li a:hover {
+        background-color: #f8f8f8;
+        color: #2ea3f2;
+        padding-left: 25px;
+    }
+    
+    /* Handle submenu items */
+    .et_mobile_menu li ul {
+        display: none;
+    }
+    
+    /* Animated hamburger to X transformation */
+    .mobile_nav.opened .mobile_menu_bar::after {
+        box-shadow: none;
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+    
+    .mobile_nav.opened .mobile_menu_bar::before {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 3px;
+        background-color: #2ea3f2;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        display: block;
+    }
+    
+    /* Ensure proper width on mobile */
+    #et-top-navigation {
+        width: 100%;
+        text-align: center; /* Help center the mobile menu */
+    }
+}

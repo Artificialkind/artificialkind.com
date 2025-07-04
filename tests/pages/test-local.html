@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Local Test - Artificialkind</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { margin: 10px 0; }
+        .pass { color: green; }
+        .fail { color: red; }
+        button { margin: 5px; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Artificialkind Website - Local Test Suite</h1>
+    <p>Open this page alongside the main website to test functionality.</p>
+    
+    <h2>Tests:</h2>
+    <div id="test-results"></div>
+    
+    <h2>Manual Tests:</h2>
+    <ul>
+        <li>✅ Page loads without JavaScript errors (check console)</li>
+        <li>✅ Preloader appears and disappears</li>
+        <li>✅ Navigation menu hover effects work</li>
+        <li>✅ Mobile menu toggle works (resize window)</li>
+        <li>✅ Smooth scrolling for anchor links</li>
+        <li>✅ Scroll animations trigger on scroll</li>
+        <li>✅ Scroll to top button appears when scrolling down</li>
+        <li>✅ All images load properly</li>
+        <li>✅ Copyright shows 2018-2025</li>
+        <li>✅ "Soon on Medium" button is present</li>
+        <li>✅ No jQuery errors in console</li>
+    </ul>
+    
+    <script>
+        const tests = [];
+        const results = document.getElementById('test-results');
+        
+        function addTest(name, test) {
+            const div = document.createElement('div');
+            div.className = 'test';
+            try {
+                const result = test();
+                div.innerHTML = `<span class="${result ? 'pass' : 'fail'}">${result ? '✅' : '❌'}</span> ${name}`;
+            } catch (e) {
+                div.innerHTML = `<span class="fail">❌</span> ${name} - Error: ${e.message}`;
+            }
+            results.appendChild(div);
+        }
+        
+        // Run tests after a delay to ensure the main page has loaded
+        setTimeout(() => {
+            // Test 1: No jQuery loaded
+            addTest('jQuery is not loaded', () => {
+                return typeof window.jQuery === 'undefined' && typeof window.$ === 'undefined';
+            });
+            
+            // Test 2: Custom JS files are loaded
+            addTest('Custom JavaScript files exist', () => {
+                return typeof initNavigation !== 'undefined' ||
+                       typeof initPreloader !== 'undefined' ||
+                       typeof initAnimations !== 'undefined' ||
+                       typeof initAccessibility !== 'undefined';
+            });
+            
+            // Test 3: No WordPress classes in body
+            addTest('No WordPress artifacts in HTML', () => {
+                const bodyClasses = document.body.className;
+                return !bodyClasses.includes('wp-') && !bodyClasses.includes('wordpress');
+            });
+            
+            // Test 4: Meta robots allows indexing
+            addTest('SEO: Robots meta allows indexing', () => {
+                const robotsMeta = document.querySelector('meta[name="robots"]');
+                return robotsMeta && robotsMeta.content.includes('index');
+            });
+            
+            // Test 5: Open Graph tags present
+            addTest('Social media tags present', () => {
+                return document.querySelector('meta[property="og:title"]') !== null;
+            });
+            
+            // Test 6: Favicon is set
+            addTest('Favicon is configured', () => {
+                return document.querySelector('link[rel="icon"]') !== null;
+            });
+            
+            // Test 7: Mobile viewport is set
+            addTest('Mobile viewport is configured', () => {
+                const viewport = document.querySelector('meta[name="viewport"]');
+                return viewport && viewport.content.includes('width=device-width');
+            });
+            
+            console.log('✅ All automated tests completed. Please perform the manual tests listed above.');
+        }, 1000);
+    </script>
+</body>
+</html>

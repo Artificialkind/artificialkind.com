@@ -1,0 +1,33 @@
+{
+  "name": "artificialkind-website",
+  "version": "2.0.0",
+  "description": "Artificialkind company website - static site",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": ["artificialkind", "AI", "website"],
+  "author": "Artificialkind",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@testing-library/jest-dom": "^6.1.5",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"],
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "js/**/*.js",
+      "!js/jquery-*.js",
+      "!js/min-*.js",
+      "!js/lazyload-*.js"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  }
+}
