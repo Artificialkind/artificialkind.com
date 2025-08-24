@@ -12,7 +12,11 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Font Preloading -->
+    <link rel="preload" href="./fonts/modules.woff" as="font" type="font/woff" crossorigin>
+    
     <!-- Stylesheets -->
+    <link rel="stylesheet" href="./css/fonts.css">
     <link rel="stylesheet" href="./css/min-style.css">
     <link rel="stylesheet" href="./css/font-awesome-4.7.0.min.css">
     <link rel="stylesheet" href="./css/mobile-menu-fix.css">
@@ -707,7 +711,6 @@
         // Ensure scripts are loaded in correct order
         document.addEventListener('DOMContentLoaded', function() {
             // All initialization is handled by main.js
-            console.log('Page loaded successfully');
         });
     </script>
 </body>
